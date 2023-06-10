@@ -1,7 +1,13 @@
 package org.bedu.equipo6.model;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@Builder
+@RequiredArgsConstructor
 public class Cliente {
     @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
     private long id;

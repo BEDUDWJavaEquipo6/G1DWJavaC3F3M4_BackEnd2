@@ -1,4 +1,7 @@
 package org.bedu.equipo6.controllers.mappers;
 
-public class VentaMapper {
+import org.mapstruct.Mapper;
+
+@Mapper
+public interface VentaMapper {
 }

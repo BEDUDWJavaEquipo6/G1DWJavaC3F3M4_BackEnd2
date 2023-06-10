@@ -4,7 +4,13 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@Builder
+@RequiredArgsConstructor
 public class Venta {
     @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
     private long ventaId;

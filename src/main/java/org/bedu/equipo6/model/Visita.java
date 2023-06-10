@@ -3,7 +3,13 @@ package org.bedu.equipo6.model;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@Builder
+@RequiredArgsConstructor
 public class Visita {
     @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
     private long id;

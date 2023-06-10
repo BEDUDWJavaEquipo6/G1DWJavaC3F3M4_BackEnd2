@@ -3,7 +3,13 @@ package org.bedu.equipo6.model;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@Data
+@Builder
+@RequiredArgsConstructor
 public class Producto {
     @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
     private long id;
