@@ -1,5 +1,8 @@
 package org.bedu.equipo6.controllers;
 
+import org.apache.coyote.Response;
+
+import jakarta.validation.Valid;
 import org.bedu.equipo6.model.Producto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +27,7 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> creaProducto(@RequestBody Producto producto){
+    public ResponseEntity<Void> creaProducto(@Valid @RequestBody Producto producto){
         return ResponseEntity.created(URI.create("")).build();
     }
 

@@ -1,6 +1,7 @@
 package org.bedu.equipo6.controllers;
 
-
+import org.apache.coyote.Response;
+import jakarta.validation.Valid;
 import org.bedu.equipo6.model.Cliente;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> creaCliente(@RequestBody Cliente cliente){
+    public ResponseEntity<Void> creaCliente(@Valid @RequestBody Cliente cliente){
         return ResponseEntity.created(URI.create("")).build();
     }
 

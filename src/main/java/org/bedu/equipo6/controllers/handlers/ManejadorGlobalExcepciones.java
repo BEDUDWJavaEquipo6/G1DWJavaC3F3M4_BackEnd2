@@ -1,7 +1,8 @@
 package org.bedu.equipo6.controllers.handlers;
 
-
 import org.bedu.equipo6.model.RespuestaError;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Map;
 import java.util.TreeMap;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
 
@@ -34,6 +36,7 @@ public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(
                 ex, respuestaError, headers, HttpStatus.BAD_REQUEST, request);
     }
+
 
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

@@ -1,5 +1,7 @@
 package org.bedu.equipo6.controllers;
 
+import org.apache.coyote.Response;
+import jakarta.validation.Valid;
 import org.bedu.equipo6.model.Etapa;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class EtapaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> creaEtapa(@RequestBody Etapa etapa, @RequestParam Long clienteId){
+    public ResponseEntity<Void> creaEtapa(@Valid @RequestBody Etapa etapa, @RequestParam Long clienteId){
         return ResponseEntity.created(URI.create("")).build();
     }
 
