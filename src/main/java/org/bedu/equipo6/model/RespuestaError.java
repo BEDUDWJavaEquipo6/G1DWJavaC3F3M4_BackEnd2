@@ -4,6 +4,7 @@ import org.bedu.equipo6.model.builders.RespuestaErrorBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+
 public class RespuestaError {
     private final LocalDateTime timestamp = LocalDateTime.now();
     private int estatus;
