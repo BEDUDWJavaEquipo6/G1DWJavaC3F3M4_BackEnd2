@@ -1,10 +1,12 @@
 package org.bedu.equipo6.controllers;
 
 import org.apache.coyote.Response;
-import jakarta.validation.Valid;
+//import javax.validation.Valid;//Antes en Spring 2
+import jakarta.validation.Valid;//En Spring 3.0
 import org.bedu.equipo6.model.Cliente;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")
+@Validated
 public class ClienteController {
     @GetMapping("/{clienteId}")
     public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId){

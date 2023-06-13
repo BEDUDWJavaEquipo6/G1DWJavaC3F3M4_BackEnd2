@@ -19,4 +19,14 @@ public class Cliente {
 
     @NotBlank(message = "Se debe proporcionar una dirección")
     private String direccion;
+
+    /* Ejemplo de Cleinte
+    {
+    "id":1,
+     "nombre":"Mark Spielberg",
+     "correoContacto":"amigo@gmail.com",
+     "numeroEmpleados":100,
+     "direccion":"Felix Cuevas 15"
+     }
+     */
 }
