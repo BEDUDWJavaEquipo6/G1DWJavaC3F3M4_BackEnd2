@@ -15,4 +15,13 @@ public class Etapa {
 
     @Positive(message = "El orden de la etapa deve ser mayor a cero")
     private int orden;
+    /*Ejemplo
+    {
+
+    "etapaId":1,
+    "nombre":"nombre",
+    "orden":1
+    }
+     */
+
 }

@@ -9,10 +9,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -20,53 +21,11 @@ import java.util.TreeMap;
 @RestControllerAdvice
 public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
 
-    @Override //Marca Error de Method does not override method from its superclass
-    /*Version que funciona hasta 2.7.12
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatus status,//Cambio a HttpStatusCode en Spring 3.0
-            WebRequest request) {
-
-     */
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request){
-
-        Map<String, String> errors = new TreeMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-            errors.put(error.getObjectName(), error.getDefaultMessage());
-        }
-        RespuestaError respuestaError = new RespuestaError();
-        respuestaError.setErrores(errors);
-        respuestaError.setRuta(request.getDescription(false).substring(4));
-        return handleExceptionInternal(
-                ex,
-                respuestaError,
-                headers,
-                HttpStatus.BAD_REQUEST,
-                request);
-    }
-
-
-    @Override //Marca Error de Method does not override method from its superclass
-    /*Version que funciona hasta 2.7.12
+    @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
             HttpRequestMethodNotSupportedException ex,
-            HttpHeaders headers,
-            HttpStatus status,//Cambio a HttpStatusCode en Spring 3.0
-            WebRequest request) {
-    */
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-            HttpRequestMethodNotSupportedException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request){
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
         Map<String, String> errors = new TreeMap<>();
 
         StringBuilder builder = new StringBuilder();
@@ -83,4 +42,25 @@ public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<Object>(respuestaError, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+
+        Map<String, String> errors = new TreeMap<>();
+
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
+            errors.put(error.getObjectName(), error.getDefaultMessage());
+        }
+
+        RespuestaError respuestaError = new RespuestaError();
+        respuestaError.setErrores(errors);
+        respuestaError.setRuta(request.getDescription(false).substring(4));
+
+        return handleExceptionInternal(
+                ex, respuestaError, headers, HttpStatus.BAD_REQUEST, request);
+    }
 }
+

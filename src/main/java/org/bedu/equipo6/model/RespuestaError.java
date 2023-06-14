@@ -1,7 +1,5 @@
 package org.bedu.equipo6.model;
 
-import org.bedu.equipo6.model.builders.RespuestaErrorBuilder;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -12,13 +10,10 @@ public class RespuestaError {
     private Map<String, String> errores;
     private String ruta;
 
-    public static RespuestaErrorBuilder builder() {
-        return new RespuestaErrorBuilder();
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
 
     public int getEstatus() {
         return estatus;
@@ -51,4 +46,8 @@ public class RespuestaError {
     public void setRuta(String ruta) {
         this.ruta = ruta;
     }
+/*
+    public static RespuestaErrorBuilder builder() {
+        return new RespuestaErrorBuilder();
+    }*/
 }
