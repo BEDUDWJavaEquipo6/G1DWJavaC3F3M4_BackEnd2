@@ -1,5 +1,6 @@
 package org.bedu.equipo6.controllers;
 
+import jakarta.validation.Valid;
 import org.bedu.equipo6.model.Venta;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class VentaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> creaVenta(@RequestBody Venta venta, @RequestParam Long clienteId){
+    public ResponseEntity<Void> creaVenta(@Valid @RequestBody Venta venta, @RequestParam Long clienteId){
         return ResponseEntity.created(URI.create("")).build();
     }
 
