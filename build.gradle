@@ -20,7 +20,7 @@ repositories {
 }
 
 ext {
-	set('snippetsDir', file("src/docs/generated-snippets"))
+	set('snippetsDir', file("documentation/generated-snippets"))
 }
 
 dependencies {
