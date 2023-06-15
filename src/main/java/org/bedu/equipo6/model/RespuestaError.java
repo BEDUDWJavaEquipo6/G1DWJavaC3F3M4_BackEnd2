@@ -1,6 +1,5 @@
 package org.bedu.equipo6.model;
 
-
 import org.bedu.equipo6.model.builders.RespuestaErrorBuilder;
 
 import java.time.LocalDateTime;
@@ -53,4 +52,3 @@ public class RespuestaError {
         this.ruta = ruta;
     }
 }
-
