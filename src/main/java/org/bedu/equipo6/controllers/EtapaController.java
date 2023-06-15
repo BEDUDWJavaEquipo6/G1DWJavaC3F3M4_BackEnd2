@@ -21,6 +21,7 @@ public class EtapaController {
     private final EtapaService etapaService;
 
     @GetMapping("/{etapaId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Etapa> getEtapa(@PathVariable Long etapaId){
         Optional<Etapa> etapaDb = etapaService.obtenEtapa(etapaId);
 
@@ -32,11 +33,13 @@ public class EtapaController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity <List<Etapa>> getEtapas(@Valid @RequestParam Long clienteId){
         return ResponseEntity.ok(etapaService.obtenEtapas());
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> creaEtapa(@Valid @RequestBody Etapa etapa, @RequestParam Long clienteId){
 
          Etapa etapaNueva = etapaService.guardaEtapa(etapa);
@@ -45,6 +48,7 @@ public class EtapaController {
     }
 
     @PutMapping("/{etapaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> actualizaEtapa(@PathVariable Long etapaId, @Valid @RequestBody Etapa etapa){
 
         etapaService.actualizaEtapa(etapa);
@@ -53,6 +57,7 @@ public class EtapaController {
     }
 
     @DeleteMapping("/{etapaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminaEtapa(@PathVariable Long etapaId){
 
         etapaService.eliminaEtapa(etapaId);

@@ -21,6 +21,7 @@ public class ProductoController {
     private final ProductoService productoService;
 
     @GetMapping("/{productoId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Producto> getProducto(@PathVariable Long productoId){
 
         Optional<Producto> productoDb = productoService.obtenProducto(productoId);
@@ -33,11 +34,13 @@ public class ProductoController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity <List<Producto>> getProductos(){
         return ResponseEntity.ok(productoService.obtenProductos());
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> creaProducto(@Valid @RequestBody Producto producto){
         Producto productoNuevo = productoService.guardaProducto(producto);
 
@@ -45,6 +48,7 @@ public class ProductoController {
     }
 
     @PutMapping("/{productoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> actualizaProducto(@PathVariable Long productoId, @Valid @RequestBody Producto producto){
 
         productoService.actualizaProducto(producto);
@@ -53,6 +57,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("/{productoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminaProducto(@PathVariable Long productoId){
 
         productoService.eliminaProducto(productoId);

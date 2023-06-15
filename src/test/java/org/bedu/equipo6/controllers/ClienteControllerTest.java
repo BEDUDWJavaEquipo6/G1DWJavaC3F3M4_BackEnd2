@@ -4,10 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bedu.equipo6.model.Cliente;
 import org.bedu.equipo6.services.ClienteService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -17,10 +22,23 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ClienteController.class)
+
+// SpringBootTest y SpringExtension habilitan el uso del IoC de Spring
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@AutoConfigureRestDocs
+
 class ClienteControllerTest {
 
     @Autowired
@@ -33,13 +51,25 @@ class ClienteControllerTest {
     void getCliente() throws Exception {
         given(clienteService.obtenCliente(anyLong())).willReturn(Optional.of(Cliente.builder().id(1L).nombre("Nombre").correoContacto("cliente@contacto.com").build()));
 
-        mockMvc.perform(get("/cliente/1")
-                .content(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(get("/cliente/{clienteId}", 1)
+                        .content(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.correoContacto", is("cliente@contacto.com")))
-                .andExpect(jsonPath("$.nombre", is("Nombre")));
+                .andExpect(jsonPath("$.nombre", is("Nombre")))
+
+                .andDo(document("cliente/get-cliente",
+                        pathParameters(
+                                parameterWithName("clienteId").description("Identificador del cliente")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("identificador del cliente"),
+                                fieldWithPath("nombre").description("nombre del cliente"),
+                                fieldWithPath("correoContacto").description("correo de contacto del cliente"),
+                                fieldWithPath("numeroEmpleados").description("número de trabajadores del cliente"),
+                                fieldWithPath("direccion").description("domicilio del cliente")
+                        )));
     }
 
     @Test
@@ -54,14 +84,23 @@ class ClienteControllerTest {
         given(clienteService.obtenClientes()).willReturn(clientes);
 
         mockMvc.perform(get("/cliente")
-                .content(MediaType.APPLICATION_JSON_VALUE))
+                        .content(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[0].correoContacto", is("contacto@cliente1.com")))
-                .andExpect(jsonPath("$[2].nombre", is("Nombre 3")));
+                .andExpect(jsonPath("$[2].nombre", is("Nombre 3")))
+
+                .andDo(document("cliente/get-clientes",
+                        responseFields(
+                                fieldWithPath("[].id").description("identificador del cliente"),
+                                fieldWithPath("[].nombre").description("nombre del cliente"),
+                                fieldWithPath("[].correoContacto").description("correo de contacto del cliente"),
+                                fieldWithPath("[].numeroEmpleados").description("número de trabajadores del cliente"),
+                                fieldWithPath("[].direccion").description("domicilio del cliente")
+                        )));
     }
 
     @Test
@@ -72,9 +111,22 @@ class ClienteControllerTest {
         given(clienteService.guardaCliente(clienteParametro)).willReturn(clienteRespuesta);
 
         mockMvc.perform(post("/cliente")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(clienteParametro)))
-                .andExpect(status().isCreated());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(clienteParametro)))
+                .andExpect(status().isCreated())
+
+                .andDo(document("cliente/post-cliente",
+                        requestFields(
+                                fieldWithPath("id").description("El identificador del nuevo cliente"),
+                                fieldWithPath("nombre").description("El nombre del cliente"),
+                                fieldWithPath("direccion").description("La dirección del cliente"),
+                                fieldWithPath("correoContacto").description("La dirección de correo electrónico de contacto"),
+                                fieldWithPath("numeroEmpleados").description("El número de personas que trabajan en las oficinas e cliente")
+                        ),
+                        responseHeaders(
+                                headerWithName("Location").description("La ubicación del recurso (su identificador generado")
+                        ))
+                );
     }
 
     @Test
@@ -82,16 +134,34 @@ class ClienteControllerTest {
 
         Cliente clienteParametro = Cliente.builder().id(1L).nombre("Nombre").direccion("Direccion").numeroEmpleados(10).correoContacto("contacto@cliente.com").build();
 
-        mockMvc.perform(put("/cliente/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(clienteParametro)))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(put("/cliente/{clienteId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(clienteParametro)))
+                .andExpect(status().isNoContent())
+
+                .andDo(document("cliente/put-cliente",
+                        pathParameters(
+                                parameterWithName("clienteId").description("Identificador del cliente")
+                        ),
+                        requestFields(
+                                fieldWithPath("id").description("El identificador del nuevo cliente"),
+                                fieldWithPath("nombre").description("El nombre del cliente"),
+                                fieldWithPath("direccion").description("La dirección del cliente"),
+                                fieldWithPath("correoContacto").description("La dirección de correo electrónico de contacto"),
+                                fieldWithPath("numeroEmpleados").description("El número de personas que trabajan en las oficinas e cliente")
+                        )
+                ));
     }
 
     @Test
     void eliminaCliente() throws Exception {
-        mockMvc.perform(delete("/cliente/1")
-                .content(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/cliente/{clienteId}", 1)
+                        .content(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isNoContent())
+
+                .andDo(document("cliente/delete-cliente",
+                        pathParameters(
+                                parameterWithName("clienteId").description("Identificador del cliente")
+                        )));
     }
 }
