@@ -21,6 +21,7 @@ public class VisitaController {
     private final VisitaService visitaService;
 
     @GetMapping("/{visitaId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Visita> getVisita(@PathVariable Long visitaId){
         Optional<Visita> visitaDb = visitaService.obtenVisita(visitaId);
 
@@ -32,11 +33,13 @@ public class VisitaController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity <List<Visita>> getVisitas(@RequestParam Long visitaId){
         return ResponseEntity.ok(visitaService.obtenVisitas());
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> creaVisita(@Valid @RequestBody Visita visita, @RequestParam Long visitaId){
         Visita visitaNuevo = visitaService.guardaVisita(visita);
 
@@ -44,6 +47,7 @@ public class VisitaController {
     }
 
     @PutMapping("/{visitaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> actualizaVisits(@PathVariable Long visitaId, @Valid @RequestBody Visita visita){
 
         visitaService.actualizaVisita(visita);
@@ -52,6 +56,7 @@ public class VisitaController {
     }
 
     @DeleteMapping("/{visitaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminaVisita(@PathVariable Long visitaId){
 
         visitaService.eliminaVisita(visitaId);

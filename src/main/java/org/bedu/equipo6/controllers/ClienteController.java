@@ -21,6 +21,7 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @GetMapping("/{clienteId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Cliente> getCliente(@PathVariable Long clienteId) {
 
         Optional<Cliente> clienteDb = clienteService.obtenCliente(clienteId);
@@ -31,13 +32,15 @@ public class ClienteController {
 
         return ResponseEntity.ok(clienteDb.get());
     }
-/*
+
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Cliente>> getClientes() {
         return ResponseEntity.ok(clienteService.obtenClientes());
     }
-*/
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> creaCliente(@Valid @RequestBody Cliente cliente) {
         Cliente clienteNuevo = clienteService.guardaCliente(cliente);
 
@@ -45,6 +48,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{clienteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> actualizaCliente(@PathVariable Long clienteId, @RequestBody @Valid Cliente cliente) {
 
         clienteService.actualizaCliente(cliente);
@@ -53,6 +57,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{clienteId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminaCliente(@PathVariable Long clienteId) {
         clienteService.eliminaCliente(clienteId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

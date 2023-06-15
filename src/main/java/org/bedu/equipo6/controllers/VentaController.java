@@ -21,6 +21,7 @@ public class VentaController {
     private final VentaService ventaService;
 
     @GetMapping("/{ventaId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Venta> getVenta(@PathVariable Long ventaId){
         Optional<Venta> ventaDb = ventaService.obtenVenta(ventaId);
 
@@ -32,11 +33,13 @@ public class VentaController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity <List<Venta>> getVentas(@Valid @RequestParam Long ventaId){
         return ResponseEntity.ok(ventaService.obtenVentas());
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> creaVenta(@Valid @RequestBody Venta venta, @RequestParam Long ventaId){
         Venta ventaNueva = ventaService.guardaVenta(venta);
 
@@ -44,6 +47,7 @@ public class VentaController {
     }
 
     @PutMapping("/{ventaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> actualizaVenta(@PathVariable Long ventaId, @Valid @RequestBody Venta venta){
         ventaService.actualizaVenta(venta);
 
@@ -51,6 +55,7 @@ public class VentaController {
     }
 
     @DeleteMapping("/{ventaId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminaVenta(@PathVariable Long ventaId){
         ventaService.eliminaVenta(ventaId);
 
