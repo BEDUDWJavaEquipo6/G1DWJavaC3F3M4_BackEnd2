@@ -1,9 +1,9 @@
 package org.bedu.equipo6.controllers.handlers;
 
-
 import org.bedu.equipo6.model.RespuestaError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -20,7 +20,11 @@ import java.util.TreeMap;
 public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
         Map<String, String> errors = new TreeMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.put(error.getField(), error.getDefaultMessage());
@@ -36,14 +40,18 @@ public class ManejadorGlobalExcepciones extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
 
         Map<String, String> errors = new TreeMap<>();
-
+        //String error = "HttpRequestMethodNotSupported " + ex.getHttpMethod() + " " + ex.getRequestURL();
         StringBuilder builder = new StringBuilder();
-        builder.append("El método ");
+        builder.append("El método: ");
         builder.append(ex.getMethod());
-        builder.append(" no está soportado para esta petición. Los métodos soportados son ");
+        builder.append(" no está soportado para esta petición. Los métodos soportados son los siguientes: ");
 
         ex.getSupportedHttpMethods().forEach(t -> builder.append(t + " "));
 

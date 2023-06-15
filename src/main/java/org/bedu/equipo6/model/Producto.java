@@ -1,17 +1,16 @@
 package org.bedu.equipo6.model;
 
-import jakarta.validation.constraints.*;
-
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import jakarta.validation.constraints.*;
+import java.time.LocalDate;
+
 @Data
 @Builder
-@RequiredArgsConstructor
 public class Producto {
-    @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
+    @PositiveOrZero(message = "El identificador del producto no puede ser un número negativo")
     private long id;
 
     @NotEmpty(message = "El nombre del producto no puede estar en blanco.")

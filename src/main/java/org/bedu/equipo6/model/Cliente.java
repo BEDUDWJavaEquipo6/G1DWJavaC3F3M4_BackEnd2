@@ -1,15 +1,16 @@
 package org.bedu.equipo6.model;
 
-import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import jakarta.validation.constraints.*;
 
 @Data
 @Builder
-@RequiredArgsConstructor
 public class Cliente {
-    @PositiveOrZero(message = "El identificador debe ser positivo o igual a cero, id>=0")
+    @PositiveOrZero(message = "El identificador no puede ser un número negativo")
     private long id;
 
     @NotEmpty(message = "El nombre del cliente no puede estar vacío")
@@ -21,7 +22,7 @@ public class Cliente {
 
     @Min(value = 10, message = "Los clientes con menos de 10 empleados no son válidos")
     @Max(value = 10000, message = "Los clientes con más de 10000 empleados no son válidos")
-    private String numeroEmpleados;
+    private int numeroEmpleados;
 
     @NotBlank(message = "Se debe proporcionar una dirección")
     private String direccion;
